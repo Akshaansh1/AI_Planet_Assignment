@@ -2,9 +2,11 @@ from pydantic import BaseModel, Field
 from typing import List, Dict, Any, Optional
 from datetime import datetime
 
+
 # Schemas for React Flow structure
 class NodeData(BaseModel):
     label: str
+
 
 class Node(BaseModel):
     id: str
@@ -14,6 +16,7 @@ class Node(BaseModel):
     width: Optional[int] = None
     height: Optional[int] = None
 
+
 class Edge(BaseModel):
     id: str
     source: str
@@ -21,20 +24,25 @@ class Edge(BaseModel):
     sourceHandle: Optional[str] = None
     targetHandle: Optional[str] = None
 
+
 class WorkflowDefinition(BaseModel):
     nodes: List[Node]
     edges: List[Edge]
 
+
 # Schemas for Workflow model
 class WorkflowBase(BaseModel):
     name: str
-    definition: WorkflowDefinition
+    definition: Dict[str, Any]  # Allow any dictionary structure for the definition
+
 
 class WorkflowCreate(WorkflowBase):
     pass
 
+
 class WorkflowUpdate(WorkflowBase):
     pass
+
 
 class Workflow(WorkflowBase):
     id: int

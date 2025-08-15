@@ -14,8 +14,8 @@ try:
     engine = create_engine(
         SQLALCHEMY_DATABASE_URL,
         pool_pre_ping=True,  # Enable connection health checks
-        pool_recycle=300,    # Recycle connections every 5 minutes
-        echo=False           # Set to True for SQL query logging
+        pool_recycle=300,  # Recycle connections every 5 minutes
+        echo=False,  # Set to True for SQL query logging
     )
     logger.info("Database engine created successfully")
 except Exception as e:
@@ -31,6 +31,7 @@ else:
 # Base class for declarative class definitions
 Base = declarative_base()
 
+
 def get_db():
     """
     Dependency to get a database session.
@@ -39,18 +40,19 @@ def get_db():
     if SessionLocal is None:
         logger.error("Database session factory not available")
         raise Exception("Database connection not available")
-    
+
     db = SessionLocal()
     try:
         yield db
     finally:
         db.close()
 
+
 def test_connection():
     """Test database connection"""
     if engine is None:
         return False
-    
+
     try:
         with engine.connect() as conn:
             conn.execute(text("SELECT 1"))
