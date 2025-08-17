@@ -1,6 +1,6 @@
-# 🌍 AIPlanet
+# 🌍 GenAI Stack
 
-AIPlanet is a powerful no-code/low-code workflow platform that combines AI capabilities with visual workflow design. Build intelligent automation workflows using a drag-and-drop interface, powered by multiple LLM providers and knowledge base integration.
+GenAI Stack is a powerful no-code/low-code workflow platform that combines AI capabilities with visual workflow design. Build intelligent automation workflows using a drag-and-drop interface, powered by multiple LLM providers and knowledge base integration.
 
 ## ✨ Features
 
@@ -15,7 +15,7 @@ AIPlanet is a powerful no-code/low-code workflow platform that combines AI capab
 
 ## 🏗️ Architecture
 
-AIPlanet consists of two main components:
+GenAI Stack consists of two main components:
 
 - **Backend**: FastAPI-based REST API with PostgreSQL database and ChromaDB for vector storage
 - **Frontend**: React-based web application with ReactFlow for workflow visualization
