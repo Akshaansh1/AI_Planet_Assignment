@@ -28,7 +28,7 @@ export async function updateWorkflow(id: number, payload: { name: string; defini
 
 export async function executeWorkflow(workflowId: number, query: string) {
   const body = JSON.stringify({ query });
-  return request(`/api/v1/llm/workflow/${workflowId}/execute`, { method: 'POST', body });
+  return request(`/api/v1/workflow/${workflowId}/execute`, { method: 'POST', body });
 }
 
 export async function queryKnowledgeBase(query: string, top_k = 3) {

@@ -45,13 +45,20 @@ class LLMService:
             prompt = f"Based on the following context, please answer the query.\n\nContext:{context}\n\nQuery: {query}"
 
         # 4. Get response from the selected LLM (Mistral is the default and only supported provider now)
-        if (
-            llm_provider == "mistral"
-            or llm_provider == "openai"
-            or llm_provider == "gemini"
-        ):
-            # We support calling mistral regardless of frontend-selected provider to simplify migration
-            response = mistral_client.generate(prompt)
+        if llm_provider in ("mistral", "openai", "gemini"):
+            # Use a short system prompt to reduce hallucination and encourage concise answers
+            system_prompt = (
+                "You are a helpful assistant. Answer concisely and only with information "
+                "that is supported by the provided context. If unsure, say 'I don't know'."
+            )
+            # Lower temperature and cap tokens to minimize hallucinations
+            response = mistral_client.generate(
+                user_prompt=prompt,
+                system_prompt=system_prompt,
+                model="mistral-small",
+                temperature=0.1,
+                max_tokens=256,
+            )
         else:
             return "Invalid LLM provider selected. Use 'mistral'."
 

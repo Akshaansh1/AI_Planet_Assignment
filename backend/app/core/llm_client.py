@@ -19,16 +19,31 @@ class MistralClient:
         }
 
     def generate(
-        self, prompt: str, model: str = "mistral-small", temperature: float = 0.7
+        self,
+        user_prompt: str,
+        system_prompt: str | None = None,
+        model: str = "mistral-small",
+        temperature: float = 0.1,
+        max_tokens: int = 256,
     ) -> str:
-        """Call Mistral text generation endpoint and return text."""
+        """Call Mistral chat completions endpoint and return assistant content.
+
+        Accepts an optional system_prompt to steer responses and uses conservative
+        defaults to reduce hallucination (low temperature, limited tokens).
+        """
         # Use the correct Mistral AI chat completions endpoint
         endpoint = "/v1/chat/completions"
 
+        messages = []
+        if system_prompt:
+            messages.append({"role": "system", "content": system_prompt})
+        messages.append({"role": "user", "content": user_prompt})
+
         payload = {
             "model": model,
-            "messages": [{"role": "user", "content": prompt}],
+            "messages": messages,
             "temperature": temperature,
+            "max_tokens": max_tokens,
         }
 
         url = f"{self.BASE_URL}{endpoint}"
@@ -69,6 +84,15 @@ mistral_client = MistralClient()
 
 
 async def get_mistral_response(
-    prompt: str, model: str = "mistral-small", temperature: float = 0.7
+    prompt: str,
+    model: str = "mistral-small",
+    temperature: float = 0.1,
+    max_tokens: int = 256,
 ) -> str:
-    return mistral_client.generate(prompt, model, temperature)
+    return mistral_client.generate(
+        user_prompt=prompt,
+        system_prompt=None,
+        model=model,
+        temperature=temperature,
+        max_tokens=max_tokens,
+    )

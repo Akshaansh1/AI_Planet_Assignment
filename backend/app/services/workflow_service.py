@@ -21,8 +21,21 @@ class WorkflowService:
     def create_workflow(
         self, db: Session, workflow: workflow_schema.WorkflowCreate
     ):  # Corrected usage
+        # workflow.definition may be a plain dict (from frontend JSON) or a Pydantic object.
+        definition_value = workflow.definition
+        try:
+            # pydantic v2 model -> model_dump
+            if hasattr(workflow.definition, "model_dump"):
+                definition_value = workflow.definition.model_dump()
+            # pydantic v1 -> dict()
+            elif hasattr(workflow.definition, "dict"):
+                definition_value = workflow.definition.dict()
+        except Exception:
+            # fallback: use as-is
+            definition_value = workflow.definition
+
         db_workflow = models.workflow.Workflow(
-            name=workflow.name, definition=workflow.definition.dict()
+            name=workflow.name, definition=definition_value
         )
         db.add(db_workflow)
         db.commit()
